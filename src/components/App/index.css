@@ -1,0 +1,10 @@
+canvas {
+	border: 1px solid black;
+	margin: 1rem;
+	display: block;
+}
+
+.ui-button {
+	padding: 0.5rem;
+	margin: 1rem;
+}
