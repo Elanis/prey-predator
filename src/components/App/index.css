@@ -4,7 +4,14 @@ canvas {
 	display: block;
 }
 
+.utils {
+	margin: 1rem;
+}
+
 .ui-button {
 	padding: 0.5rem;
-	margin: 1rem;
+}
+
+.utils-counters {
+	margin-top: 0.5rem;
 }
