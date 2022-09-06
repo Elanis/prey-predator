@@ -1,6 +1,6 @@
 import NeuralNetwork from '../NeuralNetwork';
 
-import { PLAYGROUND_WIDTH, PLAYGROUND_HEIGHT, PREY_RADIUS } from '../constants';
+import { CLONE_SCORE_THRESOLD, PLAYGROUND_WIDTH, PLAYGROUND_HEIGHT, PREY_RADIUS } from '../constants';
 
 export default class Creature {
 	id = null;
@@ -9,6 +9,10 @@ export default class Creature {
 	y = null;
 
 	neuralNetwork = null;
+
+	cloneScore = 0;
+
+	age = 0;
 
 	constructor(id, x, y) {
 		this.id = id;
@@ -38,9 +42,20 @@ export default class Creature {
 		} else if(this.y < -maxY) {
 			this.y = maxY;
 		}
+
+		this.tickSpecific();
+		this.age++;
 	}
 
 	getPosition() {
 		return { x: this.x, y: this.y };
+	}
+
+	canBeCloned() {
+		return this.cloneScore >= CLONE_SCORE_THRESOLD;
+	}
+
+	clone() {
+		throw new Error("clone hasn't been implemented !");
 	}
 }

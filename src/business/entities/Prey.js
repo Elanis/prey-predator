@@ -14,4 +14,15 @@ export default class Prey extends Creature {
 			fill: '#ffc107'
 		});
 	}
+
+	tickSpecific() {
+		this.cloneScore++;
+	}
+
+	clone(id) {
+		const newPrey = new Prey(id, this.x, this.y);
+		newPrey.neuralNetwork = this.neuralNetwork.cloneAndMutate();
+
+		return newPrey;
+	}
 }

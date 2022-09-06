@@ -19,7 +19,7 @@ export default class Neuron {
 	}
 
 	cloneAndMutate() {
-		const weights = this.#weights.map((pos) => weights * (0.99 + 0.02 * Math.random()));
+		const weights = this.#weights.map((pos) => pos * (0.99 + 0.02 * Math.random()));
 
 		return new Neuron(weights.length, weights);
 	}

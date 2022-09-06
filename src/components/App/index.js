@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 
-import { Canvas2D, Circle, Polygon, Rect } from 'canvas2d-wrapper'
+import { Canvas2D } from 'canvas2d-wrapper'
 
 import './index.css';
 
 import Prey from '../../business/entities/Prey';
 import Predator from '../../business/entities/Predator';
 
+import dieIfOld from '../../business/dieIfOld';
+import eatPreys from '../../business/eatPreys';
 import generateFreePosition from '../../business/generateFreePosition';
+import makeBirths from '../../business/makeBirths';
 
 import { PLAYGROUND_WIDTH, PLAYGROUND_HEIGHT } from '../../business/constants';
 
-const elements = [];
+let elements = [];
 
 export default function App() {
 	const [shouldUpdate, setShouldUpdate] = useState(null);
@@ -31,6 +34,12 @@ export default function App() {
 			for(const element of elements) {
 				element.tick();
 			}
+
+			elements = eatPreys(elements);
+			makeBirths(elements);
+			elements = dieIfOld(elements);
+
+			elements = [...elements];
 
 			setShouldUpdate(Date.now());
 		}, 100 - diff);
