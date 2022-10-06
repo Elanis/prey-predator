@@ -2,11 +2,17 @@ import NeuralNetwork from '../NeuralNetwork';
 
 import { CLONE_SCORE_THRESOLD, PLAYGROUND_WIDTH, PLAYGROUND_HEIGHT, PREY_RADIUS } from '../constants';
 
+import calcAngle from '../calcAngle';
+import squared_distance from '../squared_distance';
+
 export default class Creature {
 	id = null;
 
 	x = null;
 	y = null;
+
+	radarDistance = null;
+	radarAmount = null;
 
 	neuralNetwork = null;
 
@@ -14,20 +20,41 @@ export default class Creature {
 
 	age = 0;
 
-	constructor(id, x, y) {
+	constructor(id, x, y, radarDistance, radarAmount) {
 		this.id = id;
 
 		this.x = x;
 		this.y = y;
 
-		this.neuralNetwork = new NeuralNetwork(2, 2);
+		this.radarDistance = radarDistance;
+		this.radarAmount = radarAmount;
+
+		this.neuralNetwork = new NeuralNetwork(radarAmount * 2, 2);
 	}
 
-	tick() {
-		const [ x, y ] = this.neuralNetwork.apply([this.x, this.y]); 
+	radar(entities, name) {
+		const angle = 2*Math.PI/(this.radarAmount + 1);
 
-		this.x = x;
-		this.y = y;
+		const maxDistanceSquared = this.radarDistance * this.radarDistance;
+		const validEntities = entities
+			.filter((entity) => entity.constructor.name === name && squared_distance(this, entity) <= maxDistanceSquared)
+			.map((x) => calcAngle(this, x));
+
+		let output = [];
+		for(let i = 0; i < this.radarAmount; i++) {
+			output.push(
+				validEntities.filter((localAngle) => localAngle > angle * i && localAngle <= angle * (i + 1)).length
+			);
+		}
+
+		return output;
+	}
+
+	tick(entities) {
+		const [ x, y ] = this.neuralNetwork.apply(this.radar(entities, 'Prey'), this.radar(entities, 'Predator')); 
+
+		this.x += x;
+		this.y += y;
 
 		const maxX = PLAYGROUND_WIDTH / 2;
 		if(this.x > maxX) {

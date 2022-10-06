@@ -15,14 +15,15 @@ import makeBirths from '../../business/makeBirths';
 import { PLAYGROUND_WIDTH, PLAYGROUND_HEIGHT } from '../../business/constants';
 
 let elements = [];
+let timeoutId = -1;
 
 export default function App() {
 	const [shouldUpdate, setShouldUpdate] = useState(null);
 
 	useEffect(() => {
-		for(let i = 0; i < 50; i++) {
-			elements.push((new Prey(i, ...generateFreePosition(elements))));
-			elements.push((new Predator(i + 50, ...generateFreePosition(elements))));
+		for(let i = 0; i < 10; i++) {
+			elements.push((new Prey(i, ...generateFreePosition(elements), 12, 4)));
+			elements.push((new Predator(i + 50, ...generateFreePosition(elements), 9, 6)));
 		}
 		setShouldUpdate(Date.now());
 	}, []);
@@ -30,9 +31,14 @@ export default function App() {
 	function tick() {
 		let diff = shouldUpdate - Date.now();
 
-		setTimeout(() => {
+		clearTimeout(timeoutId);
+		timeoutId = setTimeout(() => {
+			if(!shouldUpdate) {
+				return;
+			}
+
 			for(const element of elements) {
-				element.tick();
+				element.tick(elements);
 			}
 
 			elements = eatPreys(elements);
@@ -69,7 +75,7 @@ export default function App() {
 				<input
 					type="button"
 					className="ui-button"
-					onClick="toggleTime"
+					onClick={() => shouldUpdate ? setShouldUpdate(null) : setShouldUpdate(Date.now())}
 					value="Start/Pause"
 				/>
 				

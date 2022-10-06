@@ -20,8 +20,10 @@ export default class Prey extends Creature {
 	}
 
 	clone(id) {
-		const newPrey = new Prey(id, this.x, this.y);
+		const newPrey = new Prey(id, this.x, this.y, this.radarDistance, this.radarAmount);
 		newPrey.neuralNetwork = this.neuralNetwork.cloneAndMutate();
+
+		this.cloneScore = 0;
 
 		return newPrey;
 	}

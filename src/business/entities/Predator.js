@@ -20,8 +20,10 @@ export default class Predator extends Creature {
 	}
 
 	clone(id) {
-		const newPredator = new Predator(id, this.x, this.y);
+		const newPredator = new Predator(id, this.x, this.y, this.radarDistance, this.radarAmount);
 		newPredator.neuralNetwork = this.neuralNetwork.cloneAndMutate();
+
+		this.cloneScore = 0;
 
 		return newPredator;
 	}

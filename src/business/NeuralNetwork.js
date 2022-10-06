@@ -9,19 +9,23 @@ export default class NeuralNetwork {
 			return;
 		}
 
-		for(let i = inputAmount; i <= outputAmount; i++) {
-			this.#layers.push(this.newLayer(i));
-		}
-
-		if(inputAmount === outputAmount) { // At least 2 layers
-			this.#layers.push(this.newLayer(outputAmount));
+		if(inputAmount < outputAmount) {
+			for(let i = inputAmount; i <= outputAmount; i++) {
+				this.#layers.push(this.newLayer(i, i - 1));
+			}
+		} else if(inputAmount > outputAmount) {
+			for(let i = inputAmount; i >= outputAmount; i--) {
+				this.#layers.push(this.newLayer(i, i + 1));
+			}
+		}else { // Get at least 2 layers
+			this.#layers.push(this.newLayer(outputAmount, outputAmount));
 		}
 	}
 
-	newLayer(amount) {
+	newLayer(currLayerAmount, nextLayerAmount) {
 		const layer = [];
-		for(let i = 0; i < amount; i++) {
-			layer.push(new Neuron(amount));
+		for(let i = 0; i < currLayerAmount; i++) {
+			layer.push(new Neuron(nextLayerAmount));
 		}
 		return layer;
 	}
