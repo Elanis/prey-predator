@@ -11,7 +11,7 @@ export default class Neuron {
 			return;
 		}
 
-		this.#bias = -1 + Math.random() * 2;
+		this.#bias = -0.5 + Math.random();
 
 		for(let i = 0; i < inputAmount; i++) {
 			this.#weights.push(MIN_WEIGHT + Math.random() * (MAX_WEIGHT - MIN_WEIGHT));
